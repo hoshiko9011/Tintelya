@@ -1,36 +1,67 @@
-# Tintelya
+<p align="center">
+  <img src="docs/banner.svg" alt="Tintelya — a color studio for websites" width="100%" />
+</p>
 
-**A color studio for websites.** Pick the colors you already love, choose a mood, and Tintelya builds a full UI palette — then shows it on a live page so you can tell if it actually works.
+<h1 align="center">Tintelya</h1>
 
-[![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+<p align="center">
+  <strong>A color studio for websites.</strong><br />
+  Start with colors you already love. Tintelya turns them into a full UI palette —<br />
+  then shows the result on a real layout so you can see if it actually works.
+</p>
 
-> Generate palettes · Check contrast · Preview on a real layout · Export CSS, Tailwind, JSON
+<p align="center">
+  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" /></a>
+  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" /></a>
+  <img src="https://img.shields.io/badge/Runs_in_the_browser-0c0c0d?style=for-the-badge" alt="Runs in the browser" />
+</p>
+
+<p align="center">
+  <em>Generate · Contrast · Preview · Export</em>
+</p>
 
 ---
 
-## Preview
+## Why Tintelya?
 
-<p align="center">
-  <img src="docs/preview.png" alt="Tintelya studio — seed colors, live website preview, and palette tokens" width="900" />
-</p>
+Most palette tools stop at a grid of hex codes. That’s fine for inspiration — less fine when you need a **website system**.
 
-<p align="center"><em>Add a screenshot at <code>docs/preview.png</code> after running locally (optional).</em></p>
+Tintelya is built for the gap between “pretty swatches” and “shippable UI tokens”:
+
+| What you give it | What you get back |
+| --- | --- |
+| 1–5 seed colors | Primary, secondary, accent |
+| A mood (Modern, Soft, Pastel…) | Background, surface, elevated, text, muted, border |
+| Optional harmony | Success / warning / danger tinted to your hue |
+| — | Live site preview + WCAG grades + one-click export |
+
+No account. No backend. Everything runs in the browser.
 
 ---
 
 ## Features
 
-- **Seed colors you control** — add up to five hex values, lock the ones you want to keep, shuffle the rest
-- **Moods** — Modern, Soft, Pastel, Vibrant, Minimal, Dark. Surfaces and type are generated as a system, not a random swatch dump
-- **Color harmony** — analogous, complementary, triadic, split, or mono — or keep your own colors as-is
-- **Live website preview** — a ceramic studio landing page (nav, hero, product cards, quote, CTA) restyles instantly. Toggle desktop / tablet / mobile
-- **WCAG contrast** — body, muted, primary, and button-label pairs graded AA / AAA / fail
-- **Click-to-copy tokens** — Primary, Secondary, Accent, Background, Surface, Elevated, Text, Muted, Border, Success, Warning, Danger
-- **Export** — HEX list, CSS variables, Tailwind v4 `@theme`, or JSON
-- **Presets & saved palettes** — Grove, Harbor, Ember, Iris, Ink, Bloom; save work to this browser
-- **Runs entirely in the browser** — no account, no backend
+### Seed colors you control
+Add up to five hex values. Lock the ones you want to keep, shuffle the rest, or load a preset (Grove, Harbor, Ember, Iris, Ink, Bloom).
+
+### Moods that behave like design systems
+Modern, Soft, Pastel, Vibrant, Minimal, and Dark don’t just recolor chips — they remap surfaces and type so the palette feels intentional.
+
+### Color harmony
+Keep **your colors**, or derive secondary and accent with analogous, complementary, triadic, split, or mono relationships.
+
+### Live website preview
+A full ceramic-studio landing page (nav, hero, product cards, quote, CTA) restyles as you edit. Switch desktop / tablet / mobile frames to stress-test the system.
+
+### WCAG contrast, in context
+Body text, muted text, primary-on-background, and button labels are graded **AA / AAA / fail** so weak pairs don’t hide until production.
+
+### Export when you’re ready
+Copy a HEX list, CSS variables, Tailwind v4 `@theme` block, or JSON — including mood, harmony, and seed metadata.
+
+### Saved locally
+Bookmark a palette in this browser and restore it later. Nothing leaves your machine.
 
 ---
 
@@ -45,20 +76,26 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-```bash
-npm run build    # production build
-npm run start    # serve the production build
-npm run lint     # ESLint
-```
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Local development server |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | ESLint |
 
 ---
 
 ## How it works
 
-1. **Seeds** — your 1–5 colors. The first is treated as primary.
-2. **Harmony** — Tintelya derives secondary and accent (or uses extra seeds when set to “Your colors”).
-3. **Mood** — maps those hues onto website roles (background, surface, text, border, semantic status) with target lightness/saturation, then nudges body text until it meets WCAG contrast.
-4. **Preview** — the mock site is driven by CSS variables from the generated palette, so you see buttons, cards, and type in context — not just a grid of chips.
+```text
+Seeds ──► Harmony ──► Mood recipes ──► Role colors ──► Contrast nudge ──► Preview + export
+```
+
+1. **Seeds** — Your 1–5 colors. The first is treated as primary.
+2. **Harmony** — Secondary and accent are either kept from extra seeds or derived from the primary.
+3. **Mood** — Lightness/saturation recipes map those hues onto website roles (background, surface, text, border, semantics).
+4. **Contrast** — Body and muted text are nudged until they meet WCAG targets against the background.
+5. **Preview** — The mock site is driven by CSS variables from the generated palette, so buttons, cards, and type update together.
 
 ---
 
@@ -66,37 +103,59 @@ npm run lint     # ESLint
 
 ```text
 app/
-  page.tsx          # Studio UI (client)
-  layout.tsx        # Document shell + metadata
-  globals.css       # Studio chrome + website preview styles
+  page.tsx            # Client entry (re-exports the studio)
+  layout.tsx          # Document shell, fonts, metadata
+  globals.css         # Studio chrome + website preview styles
 lib/
-  color.ts          # Hex / HSL / WCAG contrast
-  palette.ts        # Mood + harmony generation
-  export-palette.ts # CSS / Tailwind / JSON
+  studio-app.tsx      # Full studio UI
+  color.ts            # Hex / HSL / relative luminance / WCAG
+  palette.ts          # Mood recipes, harmony, generatePalette()
+  export-palette.ts   # HEX · CSS · Tailwind · JSON serializers
+docs/
+  banner.svg          # README hero banner
 ```
 
 ---
 
 ## Tech stack
 
-| Layer     | Choice                                      |
-| --------- | ------------------------------------------- |
+| Layer | Choice |
+| --- | --- |
 | Framework | [Next.js](https://nextjs.org/) (App Router) |
-| Language  | TypeScript                                  |
-| Styling   | CSS (design tokens in `globals.css`)        |
-| UI        | React 19                                    |
+| Language | TypeScript |
+| UI | React 19 |
+| Styling | Plain CSS with a small design-token system |
+| Persistence | `localStorage` (optional saves) |
+
+No database, no auth, no third-party color APIs.
 
 ---
 
 ## Roadmap
 
-- [ ] Share a palette via URL
-- [ ] Image-to-palette (extract colors from a screenshot)
-- [ ] Figma / CSS custom-property snippets with `--color-on-primary`
-- [ ] Persist named palettes across devices (optional accounts)
+- [ ] Share a palette via URL (encode seeds + mood + harmony)
+- [ ] Extract a starting palette from an image or screenshot
+- [ ] Richer export snippets (`--color-on-primary`, Figma-friendly tokens)
+- [ ] Named palettes that sync across devices (optional accounts)
+
+---
+
+## Contributing
+
+This is a personal / experimental studio. If you fork it:
+
+1. Keep generation pure (no network calls in the color path).
+2. Prefer small modules in `lib/` over growing `studio-app.tsx` forever.
+3. Treat the website preview as a test surface — if a palette looks wrong there, fix the system, not the mock.
 
 ---
 
 ## License
 
 Private / personal project unless otherwise noted.
+
+---
+
+<p align="center">
+  <sub>Made for quieter websites · Tintelya</sub>
+</p>
