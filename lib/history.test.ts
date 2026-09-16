@@ -22,7 +22,7 @@ describe("parseSaved", () => {
       null,
     );
     assert.equal(
-      parseSaved({ id: "x", at: 1, seeds: ["bad"], mood: "modern", harmony: "custom" }),
+      parseSaved({ id: "x", at: 1, seeds: ["not-a-color"], mood: "modern", harmony: "custom" }),
       null,
     );
     assert.equal(parseSaved(null), null);
