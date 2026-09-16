@@ -7,7 +7,7 @@
 <p align="center">
   <strong>A color studio for websites.</strong><br />
   Start with colors you already love. Tintelya turns them into a full UI palette —<br />
-  then shows the result on a real layout so you can see if it actually works.
+  then shows the result on a mock layout so you can judge the system in context.
 </p>
 
 <p align="center">
@@ -23,8 +23,12 @@
 
 Most palette tools stop at a grid of hex codes. Tintelya is built for the gap between “pretty swatches” and “shippable UI tokens.”
 
-No account and no backend for palette logic — generation runs in your browser.
-Google Fonts are loaded from Google’s servers for typography.
+**Privacy / architecture**
+
+- Palette generation runs entirely in the browser.
+- Saved palettes use `localStorage` in this browser only.
+- Palette data is not sent to a Tintelya backend (there is none).
+- The page loads fonts from **Google Fonts**, so those requests leave your machine.
 
 ---
 
@@ -33,10 +37,10 @@ Google Fonts are loaded from Google’s servers for typography.
 - **Seed colors** — Up to five hex values. In “Your colors” harmony, all five influence the palette.
 - **Moods** — Modern, Soft, Pastel, Vibrant, Minimal, Dark remap surfaces and type.
 - **Harmony** — Keep your colors, or derive secondary/accent relationships.
-- **Live website preview** — Desktop / tablet / mobile frames.
+- **Website preview** — A **fixed mock layout** (ceramic studio landing page) restyled with your palette tokens. Device toggles change the frame width (desktop / tablet / mobile); this is not a real browser or device simulator.
 - **WCAG contrast checks** — Selected token pairs graded AA / AAA / fail (not a full-page audit).
-- **Export** — HEX list, CSS variables, Tailwind `@theme`, JSON — all semantic tokens including onPrimary / onSecondary / onAccent.
-- **Saved locally** — `localStorage` in this browser. Palette math stays on-device; font files may still be requested from Google Fonts.
+- **Export** — Copy HEX, CSS variables, Tailwind `@theme`, or JSON to the clipboard (including onPrimary / onSecondary / onAccent).
+- **Saved locally** — Optional history in `localStorage`.
 
 ---
 
