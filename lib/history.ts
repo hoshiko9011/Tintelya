@@ -44,7 +44,9 @@ export function parseSaved(raw: unknown): Saved | null {
 }
 
 export function readHistory(): Saved[] {
-  if (typeof window === "undefined") return [];
+  if (typeof globalThis === "undefined" || typeof localStorage === "undefined") {
+    return [];
+  }
   try {
     const raw = localStorage.getItem(HISTORY_KEY);
     if (!raw) return [];
@@ -62,10 +64,18 @@ export function readHistory(): Saved[] {
   }
 }
 
-export function writeHistory(items: Saved[]) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(
-    HISTORY_KEY,
-    JSON.stringify(items.slice(0, MAX_HISTORY)),
-  );
+/** Persist history. Returns false if storage is unavailable or write fails. */
+export function writeHistory(items: Saved[]): boolean {
+  if (typeof globalThis === "undefined" || typeof localStorage === "undefined") {
+    return false;
+  }
+  try {
+    localStorage.setItem(
+      HISTORY_KEY,
+      JSON.stringify(items.slice(0, MAX_HISTORY)),
+    );
+    return true;
+  } catch {
+    return false;
+  }
 }
