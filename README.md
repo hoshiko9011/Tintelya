@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tintelya
 
-## Getting Started
+**A color studio for websites.** Pick the colors you already love, choose a mood, and Tintelya builds a full UI palette — then shows it on a live page so you can tell if it actually works.
 
-First, run the development server:
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+
+> Generate palettes · Check contrast · Preview on a real layout · Export CSS, Tailwind, JSON
+
+---
+
+## Preview
+
+<p align="center">
+  <img src="docs/preview.png" alt="Tintelya studio — seed colors, live website preview, and palette tokens" width="900" />
+</p>
+
+<p align="center"><em>Add a screenshot at <code>docs/preview.png</code> after running locally (optional).</em></p>
+
+---
+
+## Features
+
+- **Seed colors you control** — add up to five hex values, lock the ones you want to keep, shuffle the rest
+- **Moods** — Modern, Soft, Pastel, Vibrant, Minimal, Dark. Surfaces and type are generated as a system, not a random swatch dump
+- **Color harmony** — analogous, complementary, triadic, split, or mono — or keep your own colors as-is
+- **Live website preview** — a ceramic studio landing page (nav, hero, product cards, quote, CTA) restyles instantly. Toggle desktop / tablet / mobile
+- **WCAG contrast** — body, muted, primary, and button-label pairs graded AA / AAA / fail
+- **Click-to-copy tokens** — Primary, Secondary, Accent, Background, Surface, Elevated, Text, Muted, Border, Success, Warning, Danger
+- **Export** — HEX list, CSS variables, Tailwind v4 `@theme`, or JSON
+- **Presets & saved palettes** — Grove, Harbor, Ember, Iris, Ink, Bloom; save work to this browser
+- **Runs entirely in the browser** — no account, no backend
+
+---
+
+## Quick start
 
 ```bash
+git clone https://github.com/hoshiko9011/Tintelya.git
+cd Tintelya
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build    # production build
+npm run start    # serve the production build
+npm run lint     # ESLint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## How it works
 
-To learn more about Next.js, take a look at the following resources:
+1. **Seeds** — your 1–5 colors. The first is treated as primary.
+2. **Harmony** — Tintelya derives secondary and accent (or uses extra seeds when set to “Your colors”).
+3. **Mood** — maps those hues onto website roles (background, surface, text, border, semantic status) with target lightness/saturation, then nudges body text until it meets WCAG contrast.
+4. **Preview** — the mock site is driven by CSS variables from the generated palette, so you see buttons, cards, and type in context — not just a grid of chips.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project structure
 
-## Deploy on Vercel
+```text
+app/
+  page.tsx          # Studio UI (client)
+  layout.tsx        # Document shell + metadata
+  globals.css       # Studio chrome + website preview styles
+lib/
+  color.ts          # Hex / HSL / WCAG contrast
+  palette.ts        # Mood + harmony generation
+  export-palette.ts # CSS / Tailwind / JSON
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tech stack
+
+| Layer     | Choice                                      |
+| --------- | ------------------------------------------- |
+| Framework | [Next.js](https://nextjs.org/) (App Router) |
+| Language  | TypeScript                                  |
+| Styling   | CSS (design tokens in `globals.css`)        |
+| UI        | React 19                                    |
+
+---
+
+## Roadmap
+
+- [ ] Share a palette via URL
+- [ ] Image-to-palette (extract colors from a screenshot)
+- [ ] Figma / CSS custom-property snippets with `--color-on-primary`
+- [ ] Persist named palettes across devices (optional accounts)
+
+---
+
+## License
+
+Private / personal project unless otherwise noted.
