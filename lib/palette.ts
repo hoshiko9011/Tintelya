@@ -3,6 +3,7 @@ import {
   ensureContrast,
   hexToHsl,
   hslToHex,
+  mixHex,
   parseHex,
   rotateHue,
 } from "./color";
@@ -86,117 +87,61 @@ type SurfaceRecipe = {
 
 const RECIPES: Record<Mood, SurfaceRecipe> = {
   modern: {
-    bgL: 97,
-    bgS: 8,
-    surfaceL: 100,
-    surfaceS: 4,
-    elevatedL: 94.5,
-    elevatedS: 10,
-    textL: 12,
-    textS: 14,
-    mutedL: 42,
-    mutedS: 10,
-    borderL: 88,
-    borderS: 8,
-    chromaMul: 1,
-    chromaLShift: 0,
+    bgL: 97, bgS: 8, surfaceL: 100, surfaceS: 4, elevatedL: 94.5, elevatedS: 10,
+    textL: 12, textS: 14, mutedL: 42, mutedS: 10, borderL: 88, borderS: 8,
+    chromaMul: 1, chromaLShift: 0,
   },
   soft: {
-    bgL: 96,
-    bgS: 14,
-    surfaceL: 99,
-    surfaceS: 8,
-    elevatedL: 93,
-    elevatedS: 16,
-    textL: 18,
-    textS: 16,
-    mutedL: 46,
-    mutedS: 12,
-    borderL: 86,
-    borderS: 12,
-    chromaMul: 0.78,
-    chromaLShift: 8,
+    bgL: 96, bgS: 14, surfaceL: 99, surfaceS: 8, elevatedL: 93, elevatedS: 16,
+    textL: 18, textS: 16, mutedL: 46, mutedS: 12, borderL: 86, borderS: 12,
+    chromaMul: 0.78, chromaLShift: 8,
   },
   pastel: {
-    bgL: 97,
-    bgS: 16,
-    surfaceL: 99,
-    surfaceS: 12,
-    elevatedL: 93,
-    elevatedS: 20,
-    textL: 22,
-    textS: 18,
-    mutedL: 48,
-    mutedS: 14,
-    borderL: 86,
-    borderS: 16,
-    chromaMul: 0.55,
-    chromaLShift: 18,
+    bgL: 97, bgS: 16, surfaceL: 99, surfaceS: 12, elevatedL: 93, elevatedS: 20,
+    textL: 22, textS: 18, mutedL: 48, mutedS: 14, borderL: 86, borderS: 16,
+    chromaMul: 0.55, chromaLShift: 18,
   },
   vibrant: {
-    bgL: 98,
-    bgS: 6,
-    surfaceL: 100,
-    surfaceS: 2,
-    elevatedL: 95,
-    elevatedS: 10,
-    textL: 10,
-    textS: 12,
-    mutedL: 40,
-    mutedS: 10,
-    borderL: 88,
-    borderS: 8,
-    chromaMul: 1.12,
-    chromaLShift: -2,
+    bgL: 98, bgS: 6, surfaceL: 100, surfaceS: 2, elevatedL: 95, elevatedS: 10,
+    textL: 10, textS: 12, mutedL: 40, mutedS: 10, borderL: 88, borderS: 8,
+    chromaMul: 1.12, chromaLShift: -2,
   },
   minimal: {
-    bgL: 98,
-    bgS: 2,
-    surfaceL: 100,
-    surfaceS: 0,
-    elevatedL: 95,
-    elevatedS: 3,
-    textL: 10,
-    textS: 4,
-    mutedL: 44,
-    mutedS: 3,
-    borderL: 90,
-    borderS: 3,
-    chromaMul: 0.72,
-    chromaLShift: 0,
+    bgL: 98, bgS: 2, surfaceL: 100, surfaceS: 0, elevatedL: 95, elevatedS: 3,
+    textL: 10, textS: 4, mutedL: 44, mutedS: 3, borderL: 90, borderS: 3,
+    chromaMul: 0.72, chromaLShift: 0,
   },
   dark: {
-    bgL: 7,
-    bgS: 12,
-    surfaceL: 12,
-    surfaceS: 11,
-    elevatedL: 16,
-    elevatedS: 12,
-    textL: 96,
-    textS: 6,
-    mutedL: 68,
-    mutedS: 8,
-    borderL: 22,
-    borderS: 10,
-    chromaMul: 0.92,
-    chromaLShift: 4,
+    bgL: 7, bgS: 12, surfaceL: 12, surfaceS: 11, elevatedL: 16, elevatedS: 12,
+    textL: 96, textS: 6, mutedL: 68, mutedS: 8, borderL: 22, borderS: 10,
+    chromaMul: 0.92, chromaLShift: 4,
   },
 };
 
 const FALLBACK = "#4F6F5A";
 
+function normalizeSeeds(seeds: string[]): string[] {
+  const out: string[] = [];
+  for (const s of seeds) {
+    const p = parseHex(s);
+    if (p) out.push(p);
+  }
+  return out.length ? out : [FALLBACK];
+}
+
+/** Build primary / secondary / accent from up to 5 seed colors. */
 function pickTrio(seeds: string[], harmony: Harmony): [string, string, string] {
-  const main = parseHex(seeds[0] ?? "") ?? FALLBACK;
-  const secondSeed = seeds[1] ? parseHex(seeds[1]) : null;
-  const thirdSeed = seeds[2] ? parseHex(seeds[2]) : null;
+  const list = normalizeSeeds(seeds);
+  const main = list[0]!;
 
   if (harmony === "custom") {
-    return [
-      main,
-      secondSeed ?? rotateHue(main, 28),
-      thirdSeed ?? rotateHue(main, -32),
-    ];
+    let secondary = list[1] ?? rotateHue(main, 28);
+    let accent = list[2] ?? rotateHue(main, -32);
+    if (list[3]) secondary = mixHex(secondary, list[3]!, 0.4);
+    if (list[4]) accent = mixHex(accent, list[4]!, 0.4);
+    return [main, secondary, accent];
   }
+
   if (harmony === "analogous") {
     return [main, rotateHue(main, 32), rotateHue(main, -28)];
   }
