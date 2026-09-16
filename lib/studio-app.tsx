@@ -21,17 +21,7 @@ import {
   type Palette,
   type Seed,
 } from "@/lib/palette";
-
-const HISTORY_KEY = "tintelya.history";
-const MAX_HISTORY = 12;
-
-type Saved = {
-  id: string;
-  at: number;
-  seeds: string[];
-  mood: Mood;
-  harmony: Harmony;
-};
+import { readHistory, writeHistory, MAX_HISTORY, type Saved } from "@/lib/history";
 
 type Device = "desktop" | "tablet" | "mobile";
 
@@ -40,21 +30,6 @@ const DEVICE_WIDTH: Record<Device, number | string> = {
   tablet: 720,
   mobile: 390,
 };
-
-function readHistory(): Saved[] {
-  try {
-    const raw = localStorage.getItem(HISTORY_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as Saved[];
-    return Array.isArray(parsed) ? parsed.slice(0, MAX_HISTORY) : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeHistory(items: Saved[]) {
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, MAX_HISTORY)));
-}
 
 async function copyText(label: string, text: string): Promise<boolean> {
   try {
@@ -137,11 +112,12 @@ export default function StudioApp() {
   }, [toast]);
 
   const palette = useMemo(
-    () => generatePalette(
-      seeds.map((s) => s.hex),
-      mood,
-      harmony,
-    ),
+    () =>
+      generatePalette(
+        seeds.map((s) => s.hex),
+        mood,
+        harmony,
+      ),
     [seeds, mood, harmony],
   );
 
@@ -227,9 +203,13 @@ export default function StudioApp() {
       0,
       MAX_HISTORY,
     );
-    setHistory(next);
-    writeHistory(next);
-    showToast("Saved to this browser");
+    const ok = writeHistory(next);
+    if (ok) {
+      setHistory(next);
+      showToast("Saved to this browser");
+    } else {
+      showToast("Couldn't save palette locally");
+    }
   }
 
   function restore(item: Saved) {
@@ -240,8 +220,12 @@ export default function StudioApp() {
 
   function removeHistory(id: string) {
     const next = history.filter((h) => h.id !== id);
-    setHistory(next);
-    writeHistory(next);
+    const ok = writeHistory(next);
+    if (ok) {
+      setHistory(next);
+    } else {
+      showToast("Couldn't update saved palettes");
+    }
   }
 
   const seedHexes = seeds.map((s) => s.hex);
@@ -249,7 +233,11 @@ export default function StudioApp() {
 
   return (
     <div className="studio">
-      {toast && <div className="toast" role="status">{toast}</div>}
+      {toast && (
+        <div className="toast" role="status">
+          {toast}
+        </div>
+      )}
 
       <header className="studio-header">
         <div className="studio-header-inner">
@@ -339,6 +327,7 @@ export default function StudioApp() {
                   type="button"
                   title={item.hint}
                   className={mood === item.id ? "chip active" : "chip"}
+                  aria-pressed={mood === item.id}
                   onClick={() => setMood(item.id)}
                 >
                   {item.label}
@@ -355,6 +344,7 @@ export default function StudioApp() {
                   key={item.id}
                   type="button"
                   className={harmony === item.id ? "chip active" : "chip"}
+                  aria-pressed={harmony === item.id}
                   onClick={() => setHarmony(item.id)}
                 >
                   {item.label}
@@ -474,7 +464,7 @@ export default function StudioApp() {
           <section className="preview-section">
             <div className="section-head">
               <div>
-                <p className="eyebrow">Live site</p>
+                <p className="eyebrow">Layout mock</p>
                 <h2 className="display">Website preview</h2>
               </div>
               <div className="device-toggle">
@@ -529,8 +519,8 @@ export default function StudioApp() {
                     <p className="site-kicker">Small-batch ceramics</p>
                     <h3>Forms for quieter rooms.</h3>
                     <p className="site-desc">
-                      Handmade vessels glazed for daily use. A simple preview of
-                      how your palette holds up in a real layout.
+                      Handmade vessels glazed for daily use. A fixed mock layout
+                      that restyles with your palette tokens.
                     </p>
                     <div className="site-actions">
                       <button type="button" className="site-cta">
@@ -619,6 +609,7 @@ export default function StudioApp() {
                     key={key}
                     type="button"
                     className="swatch-card"
+                    aria-label={`Copy ${name} ${hex}`}
                     onClick={() => doCopy(name, hex)}
                   >
                     <div
@@ -640,7 +631,10 @@ export default function StudioApp() {
 
           <section>
             <p className="eyebrow">Accessibility</p>
-            <h2 className="display">Contrast</h2>
+            <h2 className="display">Contrast checks</h2>
+            <p className="section-note">
+              Selected token pairs only (not a full-page audit).
+            </p>
             <ul className="contrast-list">
               {CONTRAST_PAIRS.map((pair) => {
                 const fg = palette[pair.fg];
@@ -656,11 +650,19 @@ export default function StudioApp() {
                     >
                       Aa
                     </span>
-                    <span className="contrast-label">{pair.label}</span>
-                    <span className="contrast-ratio">
-                      {ratio.toFixed(1)}:1
+                    <div className="contrast-meta">
+                      <span className="contrast-label">{pair.label}</span>
+                      <span className="contrast-pair-tokens">
+                        {pair.fg} on {pair.bg}
+                      </span>
+                    </div>
+                    <span className="contrast-ratio">{ratio.toFixed(2)}:1</span>
+                    <span
+                      className={`grade grade-${grade}`}
+                      aria-label={`Result ${grade}`}
+                    >
+                      {grade}
                     </span>
-                    <span className={`grade grade-${grade}`}>{grade}</span>
                   </li>
                 );
               })}
@@ -671,7 +673,11 @@ export default function StudioApp() {
 
       <footer className="studio-footer">
         <strong>Tintelya</strong>
-        <span>Website palettes, generated in the browser.</span>
+        <span>
+          Palette generation and saved palettes stay in your browser; palette
+          data is not sent to a backend. Google Fonts may load from Google when
+          the page opens.
+        </span>
       </footer>
     </div>
   );
