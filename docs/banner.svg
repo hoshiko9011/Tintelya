@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-label="Tintelya — a color studio for websites">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0c0c0d"/>
+      <stop offset="55%" stop-color="#141312"/>
+      <stop offset="100%" stop-color="#1a1814"/>
+    </linearGradient>
+    <linearGradient id="wash" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4F6F5A" stop-opacity="0.22"/>
+      <stop offset="45%" stop-color="#C9BBA8" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#B8573A" stop-opacity="0.18"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas -->
+  <rect width="1200" height="420" fill="url(#bg)"/>
+  <rect width="1200" height="420" fill="url(#wash)"/>
+
+  <!-- Soft color blooms -->
+  <circle cx="180" cy="320" r="160" fill="#4F6F5A" opacity="0.18" filter="url(#soft)"/>
+  <circle cx="980" cy="90" r="140" fill="#B8573A" opacity="0.16" filter="url(#soft)"/>
+  <circle cx="720" cy="340" r="120" fill="#C9BBA8" opacity="0.12" filter="url(#soft)"/>
+
+  <!-- Fine paper grain (subtle dots) -->
+  <g fill="#f3f2ee" opacity="0.035">
+    <circle cx="60" cy="40" r="1"/><circle cx="140" cy="70" r="1"/><circle cx="220" cy="30" r="1"/>
+    <circle cx="400" cy="50" r="1"/><circle cx="560" cy="25" r="1"/><circle cx="820" cy="60" r="1"/>
+    <circle cx="1040" cy="35" r="1"/><circle cx="1120" cy="80" r="1"/><circle cx="300" cy="380" r="1"/>
+    <circle cx="640" cy="400" r="1"/><circle cx="900" cy="370" r="1"/><circle cx="1100" cy="390" r="1"/>
+  </g>
+
+  <!-- Left mark: pigment well -->
+  <g transform="translate(96, 128)">
+    <rect x="0" y="0" width="88" height="88" rx="22" fill="#1c1c1e" stroke="#2a2a2c"/>
+    <circle cx="44" cy="44" r="22" fill="#171411"/>
+    <circle cx="44" cy="44" r="16" fill="#4F6F5A"/>
+    <ellipse cx="38" cy="38" rx="5" ry="3.5" fill="#C9BBA8" opacity="0.55"/>
+  </g>
+
+  <!-- Wordmark + tagline -->
+  <text x="216" y="175" fill="#f3f2ee" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-style="italic">Tintelya</text>
+  <text x="220" y="214" fill="#8d8c87" font-family="system-ui, -apple-system, sans-serif" font-size="15" letter-spacing="4.5">COLOR STUDIO FOR WEBSITES</text>
+
+  <text x="220" y="268" fill="#cfcbc3" font-family="system-ui, -apple-system, sans-serif" font-size="20">
+    Turn the colors you already love into a full UI system —
+  </text>
+  <text x="220" y="296" fill="#cfcbc3" font-family="system-ui, -apple-system, sans-serif" font-size="20">
+    live preview, contrast checks, and export-ready tokens.
+  </text>
+
+  <!-- Palette strip -->
+  <g transform="translate(220, 332)">
+    <rect x="0" y="0" width="42" height="28" rx="6" fill="#4F6F5A"/>
+    <rect x="48" y="0" width="42" height="28" rx="6" fill="#C9BBA8"/>
+    <rect x="96" y="0" width="42" height="28" rx="6" fill="#B8573A"/>
+    <rect x="144" y="0" width="42" height="28" rx="6" fill="#F7F8F7" stroke="#2a2a2c"/>
+    <rect x="192" y="0" width="42" height="28" rx="6" fill="#1A231D"/>
+    <text x="250" y="19" fill="#6b6a66" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12">Grove · Harbor · Ember · Iris · Ink · Bloom</text>
+  </g>
+
+  <!-- Thin top rule -->
+  <rect x="0" y="0" width="1200" height="1" fill="#2a2a2c"/>
+  <rect x="0" y="419" width="1200" height="1" fill="#2a2a2c"/>
+</svg>
